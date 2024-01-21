@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOK</title>
+</head>
+<body>
+    <h1>WELCOME TO BOOK</h1>
+    <div>
+        <button type="button" id="logout">Log Out</button>
+    </div>
+    <br>
+    <table border="1">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">title</th>
+                <th scope="col">Publish_at</th>
+                <th scope="col">Gender</th>
+            </tr>
+        </thead>
+        <tbody id="content-books">
+        </tbody>
+    </table>
+    <br>
+
+    <a href="record.html">Back</a>
+
+    <script>
+        var token = localStorage.getItem('token')
+        var content_books = document.getElementById('content-books')
+
+        logout.addEventListener('click', function(){
+            localStorage.clear()
+            window.location.href = "index.html"
+        });
+
+        if (token == null){
+            window.location.href = "index.html"
+        }
+
+        fetch('http://127.0.0.1:8000/api/records',{
+            method:'GET',
+            headers:{
+                'Authorization': 'Bearer ' +token
+            }
+        })
+        .then(response =>{
+            return response.json()
+        })
+        .then(data => {
+
+            data.forEach(function (v, k) {
+                content_books.innerHTML +=
+                    `<tr>
+                        <td>${v.id}</td>
+                        <td>${v.name}</td>
+                        <td>${v.age}</td>
+                        <td>${v.title}</td>
+                        <td>${v.publish_at}</td>
+                        <td>${v.gender}</td>
+                    </tr>`;
+            });
+        })
+    </script>
+
+</body>
+</html>

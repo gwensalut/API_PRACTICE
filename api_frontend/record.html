@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REDORD</title>
+</head>
+<body>
+    <h1>WELCOME TO RECORD</h1>
+    <div>
+        <button type="button" id="logout">Log Out</button>
+    </div>
+    <br>
+    <table border="1">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Address</th>
+                <th scope="col">Gender</th>
+            </tr>
+        </thead>
+        <tbody id="content">
+        </tbody>
+    </table>
+    <br>
+    <br>
+
+    <a href="book.html">Books</a>
+
+    <script>
+        var token = localStorage.getItem('token')
+        var content = document.getElementById('content')
+
+        logout.addEventListener('click', function(){
+            localStorage.clear()
+            window.location.href = "index.html"
+        });
+
+        if (token == null){
+            window.location.href = "index.html"
+        }
+
+        fetch('http://127.0.0.1:8000/api/records',{
+            method:'GET',
+            headers:{
+                'Authorization': 'Bearer ' +token
+            }
+        })
+        .then(response =>{
+            return response.json()
+        })
+        .then(data =>{
+
+            data.forEach(function (v, k) {
+                content.innerHTML +=
+                    `<tr>
+                        <td>${v.id}</td>
+                        <td>${v.name}</td>
+                        <td>${v.age}</td>
+                        <td>${v.address}</td>
+                        <td>${v.gender}</td>
+                    </tr>`;
+            });
+        })
+    </script>
+
+</body>
+</html>
